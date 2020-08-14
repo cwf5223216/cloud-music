@@ -1,0 +1,8 @@
+const CHANGE_BANNER = 'recommend/CHANGE_BANNER'
+
+const CHANGE_RECOMMEND_LIST = 'recommend/RECOMMEND_LIST'
+
+export {
+    CHANGE_BANNER,
+    CHANGE_RECOMMEND_LIST
+}
