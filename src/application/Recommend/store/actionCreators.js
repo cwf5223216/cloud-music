@@ -1,4 +1,4 @@
-import { CHANGE_BANNER,CHANGE_RECOMMEND_LIST } from './constants'
+import { CHANGE_BANNER,CHANGE_RECOMMEND_LIST,CHANGE_ENTER_LOADING } from './constants'
 import { fromJS } from 'immutable'
 import { getBannerRequest,getRecommendListRequest } from '../../../api/request'
 
@@ -10,6 +10,11 @@ export const changeBannerList = (data)=>({
 export const changeRecommendList = (data)=>({
     type: CHANGE_RECOMMEND_LIST,
     data: fromJS(data)
+})
+
+export const changeEnterLoading = (data)=>({
+    type: CHANGE_ENTER_LOADING,
+    data
 })
 
 export const getBannerList = ()=>{
@@ -26,6 +31,7 @@ export const getRecommendList = ()=>{
     return (dispatch)=>{
         getRecommendListRequest().then(data=>{
             dispatch(changeRecommendList(data.result))
+            dispatch(changeEnterLoading(false))// change loading state
         }).catch(()=>{
             console.log('internet err');
         })
