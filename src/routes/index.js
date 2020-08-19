@@ -23,7 +23,7 @@ export default [
         component: Recommend,
         routes:[
           {
-            path: 'recommend/:id',
+            path: '/recommend/:id',
             component: Album
           }
         ]
