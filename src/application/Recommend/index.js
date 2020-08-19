@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { forceCheck } from "react-lazyload";
+import { renderRoutes } from 'react-router-config'
 import { getBannerList, getRecommendList} from "./store/actionCreators";
 import Slider from "../../components/slider";
 import RecommendList from "../../components/list";
@@ -48,6 +49,7 @@ function Recommend(props) {
         width: "75px",
         fill: "#d44439"
       }}/> : null}
+      { renderRoutes(props.route.routes) }
     </Content>
   );
 }

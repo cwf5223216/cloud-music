@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
+import ReactLoading from "react-loading";
 import { getRankList } from "./store/actionCreators";
-import Loading from '../../baseUI/loading';
-import Scroll from '../../components/scroll'
-import { filterIndex,filterIdx } from "../../api/utils";
+import Loading from "../../baseUI/loading";
+import Scroll from "../../components/scroll";
+import { filterIndex, filterIdx } from "../../api/utils";
 import { renderRoutes } from "react-router-config";
-import { Container,List,ListItem,SongList } from './style'
+import { Container, List, ListItem, SongList } from "./style";
 
 function Rank(props) {
   const { rankList: list, loading } = props;
@@ -13,12 +14,11 @@ function Rank(props) {
   const { getRankListDataDispatch } = props;
 
   let rankList = list ? list.toJS() : [];
-
+  //当有数据 不用再次发送请求
   useEffect(() => {
     if (!rankList.length) {
       getRankListDataDispatch();
     }
-    // eslint-disable-next-line
   }, []);
 
   let globalStartIndex = filterIndex(rankList);
@@ -26,11 +26,11 @@ function Rank(props) {
   let globalList = rankList.slice(globalStartIndex);
   const enterDetail = (name) => {
     const idx = filterIdx(name);
-    if(idx === null) {
+    if (idx === null) {
       alert("暂无相关数据");
       return;
-    } 
-}
+    }
+  };
 
   // 这是渲染榜单列表函数，传入 global 变量来区分不同的布局方式
   const renderRankList = (list, global) => {
@@ -87,11 +87,20 @@ function Rank(props) {
             全球榜{" "}
           </h1>
           {renderRankList(globalList, true)}
-          {/* {loading ? (
-            <EnterLoading>
-              <Loading></Loading>
-            </EnterLoading>
-          ) : null} */}
+          {loading ? (
+            <ReactLoading
+              type="spinningBubbles"
+              style={{
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                height: "75px",
+                width: "75px",
+                fill: "#d44439",
+              }}
+            />
+          ) : null}
         </div>
       </Scroll>
       {renderRoutes(props.route.routes)}
