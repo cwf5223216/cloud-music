@@ -1,102 +1,30 @@
 //src/application/Album/index.js
-import React, { useState } from "react";
+import React, { useState,useEffect,memo } from "react";
 import { CSSTransition } from "react-transition-group";
+import { connect } from 'react-redux'
+import { getAlbumList ,changeEnterLoading} from './store/actionCreators'
 import Header from "../../baseUI/header";
 import Scroll from "../../components/scroll";
-import { getCount,getName } from '../../api/utils'
+import { getCount,getName ,isEmptyObject} from '../../api/utils'
 import { Container, TopDesc, Menu, SongList, SongItem } from "./style";
 
 function Album(props) {
   const [showStatus, setShowStatus] = useState(true);
+  const id = props.match.params.id
 
-  //mock 数据
-  const currentAlbum = {
-    creator: {
-      avatarUrl:
-        "http://p1.music.126.net/O9zV6jeawR43pfiK2JaVSw==/109951164232128905.jpg",
-      nickname: "浪里推舟",
-    },
-    coverImgUrl:
-      "http://p2.music.126.net/ecpXnH13-0QWpWQmqlR0gw==/109951164354856816.jpg",
-    subscribedCount: 2010711,
-    name: "听完就睡，耳机是天黑以后柔软的梦境",
-    tracks: [
-      {
-        name: "我真的受伤了",
-        ar: [{ name: "张学友" }, { name: "周华健" }],
-        al: {
-          name: "学友 热",
-        },
-      },
-      {
-        name: "我真的受伤了",
-        ar: [{ name: "张学友" }, { name: "周华健" }],
-        al: {
-          name: "学友 热",
-        },
-      },
-      {
-        name: "我真的受伤了",
-        ar: [{ name: "张学友" }, { name: "周华健" }],
-        al: {
-          name: "学友 热",
-        },
-      },
-      {
-        name: "我真的受伤了",
-        ar: [{ name: "张学友" }, { name: "周华健" }],
-        al: {
-          name: "学友 热",
-        },
-      },
-      {
-        name: "我真的受伤了",
-        ar: [{ name: "张学友" }, { name: "周华健" }],
-        al: {
-          name: "学友 热",
-        },
-      },
-      {
-        name: "我真的受伤了",
-        ar: [{ name: "张学友" }, { name: "周华健" }],
-        al: {
-          name: "学友 热",
-        },
-      },
-      {
-        name: "我真的受伤了",
-        ar: [{ name: "张学友" }, { name: "周华健" }],
-        al: {
-          name: "学友 热",
-        },
-      },
-      {
-        name: "我真的受伤了",
-        ar: [{ name: "张学友" }, { name: "周华健" }],
-        al: {
-          name: "学友 热",
-        },
-      },
-      {
-        name: "我真的受伤了",
-        ar: [{ name: "张学友" }, { name: "周华健" }],
-        al: {
-          name: "学友 热",
-        },
-      },
-      {
-        name: "我真的受伤了",
-        ar: [{ name: "张学友" }, { name: "周华健" }],
-        al: {
-          name: "学友 热",
-        },
-      },
-    ],
-  };
+  const { playList, enterLoading } = props;
+  const { getAlbumDataDispatch } = props;
 
+  useEffect (() => {
+    getAlbumDataDispatch (id);
+  }, [getAlbumDataDispatch, id]);
+  
+  // 同时将 mock 数据的代码删除
+  let playListData = playList.toJS ();
   const handleBack = () => {
     setShowStatus(false);
   };
+
 
   return (
     <CSSTransition
@@ -109,29 +37,31 @@ function Album(props) {
     >
       <Container>
         <Header title={"返回"} handleClick={handleBack}></Header>
-        <Scroll bounceTop={false}>
+        {
+          !isEmptyObject(playListData)? (
+            <Scroll bounceTop={false}>
           <div>
-            <TopDesc background={currentAlbum.coverImgUrl}>
+            <TopDesc background={playListData.coverImgUrl}>
               <div className="background">
                 <div className="filter"></div>
               </div>
               <div className="img_wrapper">
                 <div className="decorate"></div>
-                <img src={currentAlbum.coverImgUrl} alt="" />
+                <img src={playListData.coverImgUrl} alt="" />
                 <div className="play_count">
                   <i className="iconfont play">&#xe885;</i>
                   <span className="count">
-                    {Math.floor(currentAlbum.subscribedCount / 1000) / 10} 万{" "}
+                    {Math.floor(playListData.subscribedCount / 1000) / 10} 万{" "}
                   </span>
                 </div>
               </div>
               <div className="desc_wrapper">
-                <div className="title">{currentAlbum.name}</div>
+                <div className="title">{playListData.name}</div>
                 <div className="person">
                   <div className="avatar">
-                    <img src={currentAlbum.creator.avatarUrl} alt="" />
+                    <img src={playListData.creator.avatarUrl} alt="" />
                   </div>
-                  <div className="name">{currentAlbum.creator.nickname}</div>
+                  <div className="name">{playListData.creator.nickname}</div>
                 </div>
               </div>
             </TopDesc>
@@ -161,17 +91,17 @@ function Album(props) {
                     {" "}
                     播放全部{" "}
                     <span className="sum">
-                      (共 {currentAlbum.tracks.length} 首)
+                      (共 {playListData.tracks.length} 首)
                     </span>
                   </span>
                 </div>
                 <div className="add_list">
                   <i className="iconfont">&#xe62d;</i>
-                  <span> 收藏 ({getCount(currentAlbum.subscribedCount)})</span>
+                  <span> 收藏 ({getCount(playListData.subscribedCount)})</span>
                 </div>
               </div>
               <SongItem>
-                {currentAlbum.tracks.map((item, index) => {
+                {playListData.tracks.map((item, index) => {
                   return (
                     <li key={index}>
                       <span className="index">{index + 1}</span>
@@ -188,9 +118,25 @@ function Album(props) {
             </SongList>
           </div>
         </Scroll>
+          ):null
+        }
       </Container>
     </CSSTransition>
   );
 }
 
-export default Album;
+const mapStateToProps = (state)=>({
+  playList: state.getIn(["ablum","playList"]),
+  enterLoading: state.getIn(["ablum","enterLoading"])
+})
+
+const mapDispatchToProps = (dispatch)=>{
+  return {
+    getAlbumDataDispatch(id) {
+      dispatch(changeEnterLoading(false))
+      dispatch(getAlbumList(id))
+    }
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(memo(Album))

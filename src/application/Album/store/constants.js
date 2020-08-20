@@ -1,0 +1,2 @@
+export const CHANGE_PLAY_LIST = 'album/CHANGE_PLAY_LIST';
+export const CHANGE_ENTER_LOADING = 'album/CHANGE_ENTER_LOADING';
