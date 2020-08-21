@@ -52,6 +52,7 @@ function Recommend(props) {
           }}
         />
       ) : null}
+      {renderRoutes(props.route.routes)}
     </Content>
   );
 }
