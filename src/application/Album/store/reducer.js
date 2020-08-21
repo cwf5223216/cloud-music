@@ -4,7 +4,7 @@ import { fromJS } from 'immutable';
 
 const defaultState = fromJS({
   playList: {},
-  enterLoading: false,
+  enterLoading: true,
 });
 
 export default (state = defaultState, action) => {
