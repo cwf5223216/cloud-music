@@ -24,12 +24,8 @@ function Rank(props) {
   let globalStartIndex = filterIndex(rankList);
   let officialList = rankList.slice(0, globalStartIndex);
   let globalList = rankList.slice(globalStartIndex);
-  const enterDetail = (name) => {
-    const idx = filterIdx(name);
-    if (idx === null) {
-      alert("暂无相关数据");
-      return;
-    }
+  const enterDetail = (item) => {
+    props.history.push(`/rank/${item.id}`)
   };
 
   // 这是渲染榜单列表函数，传入 global 变量来区分不同的布局方式
@@ -41,7 +37,7 @@ function Rank(props) {
             <ListItem
               key={item.coverImgId}
               tracks={item.tracks}
-              onClick={() => enterDetail(item.name)}
+              onClick={() => enterDetail(item)}
             >
               <div className="img_wrapper">
                 <img src={item.coverImgUrl} alt="" />
@@ -52,6 +48,7 @@ function Rank(props) {
             </ListItem>
           );
         })}
+        {renderRoutes(props.route.routes)}
       </List>
     );
   };

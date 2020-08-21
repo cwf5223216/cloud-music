@@ -38,8 +38,6 @@ function Recommend(props) {
           <RecommendList recommendList={recommendListJS}></RecommendList>
         </div>
       </Scroll>
-      {/* { enterLoading? <Loading></Loading>: null } */}
-      {/* { enterLoading? <ReactLoading type={'balls'} height={667} width={375}/> : null} */}
       {enterLoading ? (
         <ReactLoading
           type="spinningBubbles"
@@ -54,7 +52,6 @@ function Recommend(props) {
           }}
         />
       ) : null}
-      {renderRoutes(props.route.routes)}
     </Content>
   );
 }
