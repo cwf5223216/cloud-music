@@ -1,6 +1,6 @@
 import React from "react";
-import { CSSTransition } from "react-transition-group";
-import animations from "create-keyframe-animation";
+import { CSSTransition } from "react-transition-group"; //过渡动画
+import animations from "create-keyframe-animation";  //关键帧
 import { getName } from "../../../api/utils";
 import {
   NormalPlayerContainer,
@@ -14,9 +14,11 @@ import { useRef } from "react";
 import { prefixStyle } from '../../../api/utils'
 
 const NormalPlayer = (props) => {
+  // 当前播放歌曲 是否全屏
   const { song, fullScreen } = props;
+  // 转换全屏播放
   const { toggleFullScreen } = props;
-
+  //拿到normalPlayer DOM 、cdWrapper DOM
   const normalPlayerRef = useRef();
   const cdWrapperRef = useRef();
 
@@ -38,6 +40,7 @@ const NormalPlayer = (props) => {
       scale
     };
   };
+  //关键帧 进入
   const enter = () => {
     normalPlayerRef.current.style.display = "block";
     const { x, y, scale } = _getPosAndScale();//获取miniPlayer图片中心相对normalPlayer唱片中心的偏移
@@ -62,14 +65,14 @@ const NormalPlayer = (props) => {
     });
     animations.runAnimation(cdWrapperRef.current, "move");
   };
-
+  //  结束进入
   const afterEnter = () => {
     // 进入后解绑帧动画
     const cdWrapperDom = cdWrapperRef.current;
     animations.unregisterAnimation("move");
     cdWrapperDom.style.animation = "";
   };
-
+  //关键帧 离开
   const leave = () => {
     if (!cdWrapperRef.current) return;
     const cdWrapperDom = cdWrapperRef.current;
@@ -77,7 +80,7 @@ const NormalPlayer = (props) => {
     const { x, y, scale } = _getPosAndScale();
     cdWrapperDom.style[transform] = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
   };
-
+  // 结束离开
   const afterLeave = () => {
     if (!cdWrapperRef.current) return;
     const cdWrapperDom = cdWrapperRef.current;
