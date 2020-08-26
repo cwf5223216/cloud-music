@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useRef } from "react";
 import { CSSTransition } from "react-transition-group"; //过渡动画
-import animations from "create-keyframe-animation";  //关键帧
-import { getName } from "../../../api/utils";
+import animations from "create-keyframe-animation"; //关键帧
+import { getName, prefixStyle } from "../../../api/utils";
+import ProgressBar from "../../../baseUI/progress-bar";
 import {
   NormalPlayerContainer,
   Top,
@@ -9,9 +10,8 @@ import {
   Bottom,
   Operators,
   CDWrapper,
+  ProgressWrapper,
 } from "./style";
-import { useRef } from "react";
-import { prefixStyle } from '../../../api/utils'
 
 const NormalPlayer = (props) => {
   // 当前播放歌曲 是否全屏
@@ -22,7 +22,7 @@ const NormalPlayer = (props) => {
   const normalPlayerRef = useRef();
   const cdWrapperRef = useRef();
 
-  const transform = prefixStyle ("transform");
+  const transform = prefixStyle("transform");
 
   const _getPosAndScale = () => {
     const targetWidth = 40;
@@ -37,31 +37,31 @@ const NormalPlayer = (props) => {
     return {
       x,
       y,
-      scale
+      scale,
     };
   };
   //关键帧 进入
   const enter = () => {
     normalPlayerRef.current.style.display = "block";
-    const { x, y, scale } = _getPosAndScale();//获取miniPlayer图片中心相对normalPlayer唱片中心的偏移
+    const { x, y, scale } = _getPosAndScale(); //获取miniPlayer图片中心相对normalPlayer唱片中心的偏移
     let animation = {
       0: {
-        transform: `translate3d(${x}px,${y}px,0) scale(${scale})`
+        transform: `translate3d(${x}px,${y}px,0) scale(${scale})`,
       },
       60: {
-        transform: `translate3d(0, 0, 0) scale(1.1)`
+        transform: `translate3d(0, 0, 0) scale(1.1)`,
       },
       100: {
-        transform: `translate3d(0, 0, 0) scale(1)`
-      }
+        transform: `translate3d(0, 0, 0) scale(1)`,
+      },
     };
     animations.registerAnimation({
       name: "move",
       animation,
       presets: {
         duration: 400,
-        easing: "linear"
-      }
+        easing: "linear",
+      },
     });
     animations.runAnimation(cdWrapperRef.current, "move");
   };
@@ -78,7 +78,9 @@ const NormalPlayer = (props) => {
     const cdWrapperDom = cdWrapperRef.current;
     cdWrapperDom.style.transition = "all 0.4s";
     const { x, y, scale } = _getPosAndScale();
-    cdWrapperDom.style[transform] = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
+    cdWrapperDom.style[
+      transform
+    ] = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
   };
   // 结束离开
   const afterLeave = () => {
@@ -101,9 +103,7 @@ const NormalPlayer = (props) => {
       onExited={afterLeave}
     >
       <NormalPlayerContainer ref={normalPlayerRef}>
-        <div
-          className="background"
-        >
+        <div className="background">
           <img
             src={song.al.picUrl + "?param=300x300"}
             width="100%"
@@ -113,7 +113,7 @@ const NormalPlayer = (props) => {
         </div>
         <div className="background layer"></div>
         <Top className="top">
-          <div className="back" onClick={()=> toggleFullScreen(false)}>
+          <div className="back" onClick={() => toggleFullScreen(false)}>
             <i className="iconfont icon-back">&#xe662;</i>
           </div>
           <h1 className="title">{song.name}</h1>
@@ -131,6 +131,13 @@ const NormalPlayer = (props) => {
           </CDWrapper>
         </Middle>
         <Bottom className="bottom">
+          <ProgressWrapper>
+            <span className="time time-l">0:00</span>
+            <div className="progress-bar-wrapper">
+              <ProgressBar percent={0.2}></ProgressBar>
+            </div>
+            <div className="time time-r">4:17</div>
+          </ProgressWrapper>
           <Operators>
             <div className="icon i-left">
               <i className="iconfont">&#xe625;</i>
